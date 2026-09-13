@@ -18,19 +18,40 @@
             </div>
             <div class="col-lg-4 text-center text-lg-end">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <a href="#"><small class="me-3 text-light"><i class="fa fa-user me-2"></i>Register</small></a>
-                    <a href="#"><small class="me-3 text-light"><i class="fa fa-sign-in-alt me-2"></i>Login</small></a>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle text-light" data-bs-toggle="dropdown"><small><i
-                                    class="fa fa-home me-2"></i> My Dashboard</small></a>
-                        <div class="dropdown-menu rounded">
-                            <a href="#" class="dropdown-item"><i class="fas fa-user-alt me-2"></i> My Profile</a>
-                            <a href="#" class="dropdown-item"><i class="fas fa-comment-alt me-2"></i> Inbox</a>
-                            <a href="#" class="dropdown-item"><i class="fas fa-bell me-2"></i> Notifications</a>
-                            <a href="#" class="dropdown-item"><i class="fas fa-cog me-2"></i> Account Settings</a>
-                            <a href="#" class="dropdown-item"><i class="fas fa-power-off me-2"></i> Log Out</a>
+
+                    @guest
+                        {{-- Show Register & Login links for guests --}}
+                        <a href="{{ route('signup') }}">
+                            <small class="me-3 text-light"><i class="fa fa-user me-2"></i>Register</small>
+                        </a>
+                        <a href="{{ route('login') }}">
+                            <small class="me-3 text-light"><i class="fa fa-sign-in-alt me-2"></i>Login</small>
+                        </a>
+                    @endguest
+
+                    @auth
+                        {{-- Show user dropdown for authenticated users --}}
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle text-light" data-bs-toggle="dropdown">
+                                <small><i class="fa fa-user me-2"></i> {{ Auth::user()->name }}</small>
+                            </a>
+                            <div class="dropdown-menu rounded">
+                                <a href="#" class="dropdown-item"><i class="fas fa-user-alt me-2"></i> My Profile</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-comment-alt me-2"></i> Inbox</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-bell me-2"></i> Notifications</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-cog me-2"></i> Account Settings</a>
+                                <hr class="dropdown-divider">
+                                <a href="#" class="dropdown-item"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-power-off me-2"></i> Log Out
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    @endauth
+
                 </div>
             </div>
         </div>
@@ -81,7 +102,6 @@
                             <a href="{{ route('explore.tours') }}" class="dropdown-item">Explore Tour</a>
                             <a href="{{ route('gallery') }}" class="dropdown-item">Our Gallery</a>
                             <a href="{{ route('travel.guides') }}" class="dropdown-item">Travel Guides</a>
-                            
                             <a href="#" class="dropdown-item">404 Page</a>
                         </div>
                     </div>
@@ -89,7 +109,6 @@
                         class="nav-item nav-link {{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
                 </div>
                 <a href="{{ route('booking') }}" class="btn btn-primary rounded-pill py-2 px-4 ms-lg-4">Book Now</a>
-                
             </div>
         </nav>
 
@@ -198,7 +217,6 @@
         #mainNavbar .logo-white {
             display: block;
         }
-
         #mainNavbar .logo-blue {
             display: none;
         }
@@ -215,13 +233,9 @@
             transition: color 0.3s ease;
             position: relative;
         }
-
-        /* ----- Nav Links Hover: WHITE (Stay White) ----- */
         #mainNavbar .nav-link:hover {
             color: #ffffff !important;
         }
-
-        /* ----- Active Nav Link: WHITE ----- */
         #mainNavbar .nav-link.active {
             color: #ffffff !important;
         }
@@ -230,7 +244,6 @@
         #mainNavbar .dropdown-toggle {
             color: rgba(255, 255, 255, 0.9) !important;
         }
-
         #mainNavbar .dropdown-toggle:hover {
             color: #ffffff !important;
         }
@@ -245,41 +258,31 @@
             padding: 10px 0;
         }
 
-        /* ----- Logo Switching ----- */
         #mainNavbar.navbar-scrolled .logo-white {
             display: none;
         }
-
         #mainNavbar.navbar-scrolled .logo-blue {
             display: block;
         }
 
-        /* ----- Brand Text: NAVY BLUE ----- */
         #mainNavbar.navbar-scrolled .brand-text {
             color: #13357B !important;
         }
 
-        /* ----- Nav Links: NAVY BLUE (Default) ----- */
         #mainNavbar.navbar-scrolled .nav-link {
             color: #13357B !important;
         }
-
-        /* ----- Nav Links Hover: DARKER NAVY BLUE ----- */
         #mainNavbar.navbar-scrolled .nav-link:hover {
             color: #0a1f4a !important;
         }
-
-        /* ----- Active Nav Link: NAVY BLUE with Underline ----- */
         #mainNavbar.navbar-scrolled .nav-link.active {
             color: #f9f9f9 !important;
             font-weight: 600;
         }
 
-        /* ----- Dropdown Toggle: NAVY BLUE ----- */
         #mainNavbar.navbar-scrolled .dropdown-toggle {
             color: #13357B !important;
         }
-
         #mainNavbar.navbar-scrolled .dropdown-toggle:hover {
             color: #0a1f4a !important;
         }
@@ -288,20 +291,15 @@
         /* ========================================
                    NAVBAR TOGGLER BUTTON
                    ======================================== */
-        /* Default: White toggler */
         #mainNavbar .navbar-toggler {
             border-color: rgba(255, 255, 255, 0.5);
         }
-
         #mainNavbar .navbar-toggler .fa-bars {
             color: #ffffff;
         }
-
-        /* Scrolled: Navy blue toggler */
         #mainNavbar.navbar-scrolled .navbar-toggler {
             border-color: rgba(19, 53, 123, 0.3);
         }
-
         #mainNavbar.navbar-scrolled .navbar-toggler .fa-bars {
             color: #13357B;
         }
@@ -314,12 +312,10 @@
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(249, 247, 247, 0.1);
         }
-
         .dropdown-item {
             color: #757575 !important;
             transition: all 0.3s ease;
         }
-
         .dropdown-item:hover {
             background: #13357B !important;
             color: #ffffff !important;
@@ -334,59 +330,44 @@
                 background: #ffffff !important;
                 padding: 10px 0;
             }
-
             #mainNavbar .logo-white {
                 display: none;
             }
-
             #mainNavbar .logo-blue {
                 display: block;
             }
-
             #mainNavbar .brand-text {
                 color: #13357B !important;
             }
-
-            /* Mobile Nav Links: NAVY BLUE */
             #mainNavbar .nav-link {
                 color: #13357B !important;
                 padding: 10px 0 !important;
             }
-
             #mainNavbar .nav-link:hover {
                 color: #0a1f4a !important;
                 background: rgba(19, 53, 123, 0.05);
                 border-radius: 5px;
             }
-
             #mainNavbar .nav-link.active {
                 color: #13357B !important;
                 font-weight: 600;
             }
-
             #mainNavbar .dropdown-toggle {
                 color: #13357B !important;
             }
-
-            /* Mobile Toggler: Navy Blue */
             #mainNavbar .navbar-toggler {
                 border-color: rgba(19, 53, 123, 0.3);
             }
-
             #mainNavbar .navbar-toggler .fa-bars {
                 color: #13357B;
             }
-
-            /* Mobile Dropdown */
             .dropdown-menu {
                 background: #f8f9fa !important;
                 border: none !important;
             }
-
             .dropdown-item {
                 color: #13357B !important;
             }
-
             .dropdown-item:hover {
                 background: #13357B !important;
                 color: #ffffff !important;
@@ -401,7 +382,6 @@
             #mainNavbar .nav-link {
                 position: relative;
             }
-
             #mainNavbar .nav-link::after {
                 content: '';
                 position: absolute;
@@ -413,17 +393,14 @@
                 transition: all 0.3s ease;
                 transform: translateX(-50%);
             }
-
             #mainNavbar .nav-link:hover::after,
             #mainNavbar .nav-link.active::after {
                 width: 60%;
             }
 
-            /* Scrolled state underline: Navy Blue */
             #mainNavbar.navbar-scrolled .nav-link::after {
                 background: #13357B;
             }
-
             #mainNavbar.navbar-scrolled .nav-link:hover::after,
             #mainNavbar.navbar-scrolled .nav-link.active::after {
                 width: 60%;
@@ -433,25 +410,12 @@
 </header>
 
 <script>
-    /**
-     * Main JavaScript File
-     */
     document.addEventListener('DOMContentLoaded', function () {
-        'use strict';
-
-        // ========================================
-        // Navbar Scroll Effect - Logo Switching
-        // ========================================
-
         const navbar = document.getElementById('mainNavbar');
-
         if (navbar) {
-            // Check scroll position on page load
             if (window.scrollY > 50) {
                 navbar.classList.add('navbar-scrolled');
             }
-
-            // Listen for scroll events
             window.addEventListener('scroll', function () {
                 if (window.scrollY > 50) {
                     navbar.classList.add('navbar-scrolled');
@@ -460,7 +424,5 @@
                 }
             });
         }
-
-        console.log('Navbar scroll effect initialized.');
     });
 </script>

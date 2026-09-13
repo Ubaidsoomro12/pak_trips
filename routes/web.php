@@ -11,14 +11,42 @@ use App\Http\Controllers\front\DestinationController;
 use App\Http\Controllers\front\ExploreTourController;
 use App\Http\Controllers\front\GalleryController;
 use App\Http\Controllers\front\TravelGuideController;
+
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
+
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Front Routes
-|--------------------------------------------------------------------------
-*/
+// ================================================
+// TEMPORARY TEST ROUTES (safe to delete once auth works)
+// ================================================
+Route::get('/rawtest', fn () => 'RAW OK');
+Route::get('/viewtest', fn () => view('auth.login'));
 
+// ================================================
+// AUTHENTICATION ROUTES
+// ================================================
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/signup', [AuthController::class, 'showSignupForm'])->name('signup');
+    Route::post('/signup', [AuthController::class, 'signup']);
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+// ================================================
+// ADMIN ROUTES (role = 1 only)
+// ================================================
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
+
+// ================================================
+// FRONT ROUTES
+// ================================================
 Route::get('/', [FrontPageController::class, 'index'])->name('home');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/services', [ServiceController::class, 'index'])->name('services');
