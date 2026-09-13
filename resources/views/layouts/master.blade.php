@@ -25,8 +25,6 @@
             {{-- Flash Messages --}}
             @include('partials.message')
 
-
-
             {{-- Page Content --}}
             @yield('content')
         </main>
